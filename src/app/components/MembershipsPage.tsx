@@ -1,9 +1,5 @@
-import { motion, AnimatePresence } from 'motion/react';
-import { ArrowLeft, Sparkles, Lock } from 'lucide-react';
 import { useState } from 'react';
-import logoImage from '/images/logo.png';
-import { MobileFooter } from './MobileFooter';
-import { ComingSoonModal } from './ComingSoonModal';
+import { ChevronLeft } from 'lucide-react';
 
 interface MembershipsPageProps {
   onBack: () => void;
@@ -11,532 +7,489 @@ interface MembershipsPageProps {
   navigateToHome?: () => void;
 }
 
-type Category = 'All' | 'Coaching' | 'Books';
-
-interface Book {
+interface Membership {
   id: number;
-  title: string;
-  subtitle: string;
-  symbol: string;
-  suitColor: string;
-  badge: {
-    text: string;
-    bgColor: string;
-  };
+  name: string;
   description: string;
-  features: string[];
+  icon: string;
   price: string;
-  buttonText: string;
-  isLocked: boolean;
-  category: 'Coaching' | 'Books';
+  priceNote: string;
+  features: string[];
+  isFeatured: boolean;
 }
 
-const products: Book[] = [
+const memberships: Membership[] = [
   {
     id: 1,
-    title: 'Coaching',
-    subtitle: 'COACHING',
-    symbol: '🎯',
-    suitColor: '#8B0000',
-    badge: {
-      text: 'PREMIUM',
-      bgColor: '#8B0000'
-    },
-    description: 'One-on-one coaching sessions to help you break free from manipulation and reclaim your personal power.',
+    name: 'Books For Brains',
+    description: 'Perfect starter package',
+    icon: '📚',
+    price: 'Rs.12,800',
+    priceNote: 'One-time payment',
     features: [
-      '4 weekly sessions',
-      'Personalized action plan',
-      'Email support between calls',
-      'Resource library access'
+      'All pages + unreleased',
+      'Libraries access',
+      'Audiobooks + AI Mentor'
     ],
-    price: '$199/month',
-    buttonText: 'Get Started',
-    isLocked: false,
-    category: 'Coaching'
+    isFeatured: false
   },
   {
     id: 2,
-    title: 'Complete Book Collection',
-    subtitle: 'BRAINS',
-    symbol: '📚',
-    suitColor: '#1E3A5F',
-    badge: {
-      text: 'POPULAR',
-      bgColor: '#1E3A5F'
-    },
-    description: 'Get access to all current and future books in the series. Read at your own pace.',
+    name: 'Unlimited Coaching',
+    description: 'Personal guidance unlimited',
+    icon: '❓',
+    price: 'Rs.56,900',
+    priceNote: 'One-time payment',
     features: [
-      'All 4 books in series',
-      'Audiobook versions included',
-      'Future updates free',
-      'Downloadable PDFs'
+      'Everything in Books package',
+      'Unlimited 1-on-1 coaching',
+      'Priority support access'
     ],
-    price: '$49 one-time',
-    buttonText: 'Get Access',
-    isLocked: false,
-    category: 'Books'
+    isFeatured: true
   },
   {
     id: 3,
-    title: 'The Complete Bundle',
-    subtitle: 'LAUGHING',
-    symbol: '🎩',
-    suitColor: '#D4A017',
-    badge: {
-      text: 'PREMIUM',
-      bgColor: '#8B0000'
-    },
-    description: 'Everything we offer in one package. Books, coaching, and exclusive content.',
+    name: 'The Live Laughing Package',
+    description: 'Ultimate VIP experience',
+    icon: '🎩',
+    price: 'Rs.199,100',
+    priceNote: 'One-time payment',
     features: [
-      'All books + audiobooks',
-      '4 coaching sessions',
-      'Private community access',
-      'Bonus workbooks'
+      'Everything in Coaching',
+      'Live interactive sessions',
+      'VIP community + exclusive tools'
     ],
-    price: '$299 (Save $100)',
-    buttonText: 'Get Bundle',
-    isLocked: false,
-    category: 'Books'
-  },
-  {
-    id: 4,
-    title: 'Sessions',
-    subtitle: 'SESSIONS',
-    symbol: '🏕️',
-    suitColor: '#9CA3AF',
-    badge: {
-      text: 'COMING SOON',
-      bgColor: '#9CA3AF'
-    },
-    description: '',
-    features: [],
-    price: '',
-    buttonText: '',
-    isLocked: true,
-    category: 'Coaching'
-  },
-  {
-    id: 5,
-    title: 'Starter',
-    subtitle: 'STARTER',
-    symbol: '⭐',
-    suitColor: '#9CA3AF',
-    badge: {
-      text: 'COMING SOON',
-      bgColor: '#9CA3AF'
-    },
-    description: '',
-    features: [],
-    price: '',
-    buttonText: '',
-    isLocked: true,
-    category: 'Books'
+    isFeatured: false
   }
 ];
 
-function PlayingCard({ book, index, onSelect, onLockedClick }: { book: Book; index: number; onSelect: () => void; onLockedClick: () => void }) {
-  const [isFlipped, setIsFlipped] = useState(false);
-  const [isShaking, setIsShaking] = useState(false);
-
-  const handleClick = () => {
-    if (book.isLocked) {
-      setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 300);
-      onLockedClick();
-    } else {
-      setIsFlipped(!isFlipped);
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0, x: isShaking ? [0, -8, 8, -8, 8, 0] : 0 }}
-      transition={{
-        opacity: { duration: 0.6, delay: index * 0.15 },
-        y: { duration: 0.6, delay: index * 0.15, ease: 'easeOut' },
-        x: isShaking ? { duration: 0.3 } : {}
-      }}
-      className="relative"
-      style={{ perspective: '1500px' }}
-      onClick={handleClick}
-    >
-      <motion.div
-        className="relative w-full"
-        style={{
-          transformStyle: 'preserve-3d',
-          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-          height: '280px',
-          minHeight: '280px',
-          cursor: book.isLocked ? 'not-allowed' : 'pointer'
-        }}
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.8, ease: 'easeInOut' }}
-      >
-        {/* FRONT OF CARD */}
-        <div
-          className="absolute inset-0 rounded-2xl shadow-2xl"
-          style={{
-            backfaceVisibility: 'hidden',
-            background: book.isLocked
-              ? 'linear-gradient(135deg, #F5F5F5 0%, #E5E5E5 100%)'
-              : 'linear-gradient(135deg, #FFFEF9 0%, #FFF8E7 100%)',
-            border: book.isLocked ? '2px solid #CCCCCC' : '2px solid #1E3A5F',
-            boxShadow: book.isLocked
-              ? '0 8px 30px rgba(0,0,0,0.05)'
-              : '0 8px 30px rgba(0,0,0,0.08)',
-            padding: '16px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            opacity: book.isLocked ? 0.6 : 1
-          }}
-        >
-          {/* Top Corner */}
-          <div className="flex justify-between items-start">
-            <div className="text-left">
-              <div
-                className="font-bold leading-none"
-                style={{
-                  color: book.isLocked ? '#999999' : book.suitColor,
-                  fontSize: '40px',
-                  lineHeight: 1
-                }}
-              >
-                {book.symbol}
-              </div>
-              <div
-                className="text-xs font-bold mt-1 tracking-wider"
-                style={{
-                  color: book.isLocked ? '#999999' : book.suitColor,
-                  fontFamily: 'Open Sans, sans-serif'
-                }}
-              >
-                {book.subtitle}
-              </div>
-            </div>
-
-            <motion.div
-              className="px-3 py-1.5 rounded-full text-[10px] font-bold text-white tracking-wide"
-              style={{
-                backgroundColor: book.badge.bgColor,
-                fontFamily: 'Open Sans, sans-serif',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.15)'
-              }}
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              {book.badge.text}
-            </motion.div>
-          </div>
-
-          {/* Center - Large Watermark Symbol */}
-          <div className="flex items-center justify-center">
-            <motion.div
-              className="font-bold"
-              style={{
-                fontSize: '100px',
-                color: book.isLocked ? 'rgba(200,200,200,0.3)' : `${book.suitColor}15`,
-                lineHeight: 1
-              }}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            >
-              {book.symbol}
-            </motion.div>
-          </div>
-
-          {/* Bottom Corner */}
-          <div className="flex justify-between items-end">
-            <div className="text-xs text-gray-400" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-              {!book.isLocked && 'Tap to flip'}
-            </div>
-            <div className="text-right">
-              <div
-                className="font-bold leading-none"
-                style={{
-                  color: book.isLocked ? '#999999' : book.suitColor,
-                  fontSize: '20px'
-                }}
-              >
-                🎪
-              </div>
-            </div>
-          </div>
-
-          {/* Lock Overlay */}
-          {book.isLocked && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="bg-white/80 rounded-full p-3 shadow-lg">
-                <Lock size={28} className="text-gray-400" />
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* BACK OF CARD */}
-        <div
-          className="absolute inset-0 rounded-2xl shadow-2xl"
-          style={{
-            backfaceVisibility: 'hidden',
-            transform: 'rotateY(180deg)',
-            background: 'linear-gradient(135deg, #FAF7F2 0%, #F5F1E8 100%)',
-            border: '2px solid #1E3A5F',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.1)',
-            padding: '16px',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between'
-          }}
-        >
-          {/* Header */}
-          <div>
-            <div className="flex items-start justify-between mb-1">
-              <div
-                className="font-bold"
-                style={{
-                  color: book.suitColor,
-                  fontSize: '28px'
-                }}
-              >
-                {book.symbol}
-              </div>
-            </div>
-
-            <h2
-              className="text-xs text-gray-500 mb-0.5 tracking-wide"
-              style={{ fontFamily: 'Open Sans, sans-serif' }}
-            >
-              {book.title}
-            </h2>
-            <h3
-              className="text-xl font-bold mb-3"
-              style={{
-                fontFamily: 'Playfair Display, serif',
-                color: book.suitColor
-              }}
-            >
-              {book.subtitle}
-            </h3>
-
-            {/* Gold Divider */}
-            <div
-              className="h-0.5 rounded-full mb-3"
-              style={{
-                width: '60px',
-                backgroundColor: '#D4A017'
-              }}
-            />
-
-            {/* Description */}
-            <p
-              className="text-sm leading-relaxed text-gray-700 mb-3"
-              style={{
-                fontFamily: 'Open Sans, sans-serif',
-                display: '-webkit-box',
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden'
-              }}
-            >
-              {book.description}
-            </p>
-
-            {/* Features List */}
-            <div className="space-y-1.5 mb-3">
-              {book.features.map((feature, idx) => (
-                <div key={idx} className="flex items-start gap-2">
-                  <span className="text-green-600 font-bold" style={{ fontFamily: 'Open Sans, sans-serif' }}>✓</span>
-                  <span className="text-xs text-gray-700" style={{ fontFamily: 'Open Sans, sans-serif' }}>{feature}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Price & Button */}
-          <div>
-            <div className="text-center mb-3">
-              <div
-                className="text-2xl font-bold"
-                style={{
-                  fontFamily: 'Playfair Display, serif',
-                  color: '#D4A017'
-                }}
-              >
-                {book.price}
-              </div>
-            </div>
-
-            <motion.button
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect();
-              }}
-              className="w-full py-3 rounded-xl font-bold text-white shadow-lg"
-              style={{
-                backgroundColor: '#D4A017',
-                fontFamily: 'Open Sans, sans-serif'
-              }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.15 }}
-            >
-              {book.buttonText}
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
 export function MembershipsPage({ onBack, onProductSelect, navigateToHome }: MembershipsPageProps) {
-  const [activeTab, setActiveTab] = useState<Category>('All');
-  const [isComingSoonModalOpen, setIsComingSoonModalOpen] = useState(false);
-  const [selectedLockedProduct, setSelectedLockedProduct] = useState<Book | null>(null);
+  const handleSelect = (membership: Membership) => {
+    onProductSelect(membership.id);
+  };
 
-  const filteredProducts = activeTab === 'All'
-    ? products
-    : products.filter(p => p.category === activeTab);
+  const handleBuyNow = (membership: Membership, e: React.MouseEvent) => {
+    e.stopPropagation();
+    alert(`✨ Proceeding to checkout\n\n${membership.name}\nPrice: ${membership.price}\n\n🎉 Great choice!`);
+  };
 
-  const tabs: Category[] = ['All', 'Coaching', 'Books'];
+  const handleCompare = () => {
+    alert('📊 Quick Comparison:\n\n' +
+          '📚 Books For Brains - Rs.12,800\n' +
+          '   → Best for self-learners\n\n' +
+          '❓ Unlimited Coaching - Rs.56,900 ⭐\n' +
+          '   → Best value with personal guidance\n\n' +
+          '🎩 Live Laughing Package - Rs.199,100\n' +
+          '   → Ultimate VIP experience');
+  };
 
-  const handleLockedClick = (product: Book) => {
-    setSelectedLockedProduct(product);
-    setIsComingSoonModalOpen(true);
+  const handleContact = () => {
+    alert('💬 Have questions?\n\nContact us:\n📧 Email: support@wishful-tinkering.com\n📱 We\'re here to help!');
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF0E6] flex flex-col pb-[60px]" style={{ fontFamily: 'Open Sans, sans-serif' }}>
-      {/* Header */}
-      <motion.div
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
-        className="bg-[#8B0000] text-white px-4"
-        style={{ height: '56px', minHeight: '56px' }}
-      >
-        <div className="h-full flex items-center max-w-lg mx-auto">
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3, duration: 0.4 }}
-            onClick={onBack}
-            className="text-[#D4A017] hover:text-white transition-colors p-2"
-            aria-label="Go back"
-          >
-            <ArrowLeft size={24} />
-          </motion.button>
+    <>
+      <style>{`
+        .memberships-page {
+          min-height: 100vh;
+          background: linear-gradient(135deg, #F5E6D3 0%, #E8D5B7 100%);
+          display: flex;
+          flex-direction: column;
+          font-family: 'Georgia', serif;
+          overflow: hidden;
+        }
 
-          <div className="flex-1 text-center px-2">
-            <h1 className="text-lg font-bold flex items-center justify-center gap-2" style={{ fontFamily: 'Playfair Display, serif' }}>
-              <motion.span
-                animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        .header {
+          background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+          padding: 12px 15px;
+          text-align: center;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          flex-shrink: 0;
+        }
+
+        .header-content {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          max-width: 400px;
+          margin: 0 auto;
+        }
+
+        .back-btn {
+          background: transparent;
+          border: none;
+          color: white;
+          cursor: pointer;
+          padding: 5px;
+        }
+
+        .logo {
+          width: 50px;
+          height: 50px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 8px;
+          font-weight: bold;
+          color: #8B0000;
+          line-height: 1.1;
+          margin: 0 auto 6px;
+        }
+
+        .header-title {
+          color: white;
+          font-size: 20px;
+          margin-bottom: 3px;
+          font-weight: bold;
+        }
+
+        .header-subtitle {
+          color: rgba(255,255,255,0.9);
+          font-size: 11px;
+          font-style: italic;
+        }
+
+        .main-container {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          padding: 15px 10px 10px;
+          overflow: hidden;
+        }
+
+        .cards-container {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          overflow-y: auto;
+          padding: 0 5px;
+        }
+
+        .membership-card {
+          background: white;
+          border-radius: 15px;
+          padding: 15px;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+          display: flex;
+          gap: 12px;
+          align-items: stretch;
+          transition: all 0.3s;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .membership-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 5px;
+          height: 100%;
+          background: linear-gradient(180deg, #1E90FF 0%, #4169E1 100%);
+        }
+
+        .membership-card:active {
+          transform: scale(0.98);
+        }
+
+        .membership-card.featured {
+          border: 3px solid #DAA520;
+          background: linear-gradient(135deg, #FFFEF0 0%, #FFF9E6 100%);
+        }
+
+        .membership-card.featured::before {
+          background: linear-gradient(180deg, #DAA520 0%, #B8860B 100%);
+          width: 6px;
+        }
+
+        .best-value-badge {
+          position: absolute;
+          top: -8px;
+          right: 10px;
+          background: linear-gradient(135deg, #DAA520 0%, #FFD700 100%);
+          color: white;
+          padding: 4px 12px;
+          border-radius: 12px;
+          font-size: 9px;
+          font-weight: bold;
+          text-transform: uppercase;
+          box-shadow: 0 2px 8px rgba(218,165,32,0.4);
+          z-index: 1;
+        }
+
+        .card-icon-section {
+          flex-shrink: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          width: 70px;
+        }
+
+        .card-icon {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #1E90FF 0%, #4169E1 100%);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 30px;
+          box-shadow: 0 4px 12px rgba(30,144,255,0.3);
+          margin-bottom: 6px;
+        }
+
+        .card-rank {
+          background: #333;
+          color: white;
+          width: 22px;
+          height: 22px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 11px;
+          font-weight: bold;
+        }
+
+        .card-content {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .card-header {
+          margin-bottom: 8px;
+        }
+
+        .card-title {
+          font-size: 15px;
+          color: #333;
+          font-weight: bold;
+          margin-bottom: 3px;
+          line-height: 1.2;
+        }
+
+        .card-description {
+          font-size: 10px;
+          color: #666;
+          font-style: italic;
+        }
+
+        .card-features {
+          margin-bottom: 10px;
+          flex: 1;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: flex-start;
+          margin-bottom: 5px;
+          font-size: 10px;
+          line-height: 1.4;
+          color: #555;
+        }
+
+        .feature-icon {
+          color: #1E90FF;
+          margin-right: 5px;
+          font-size: 11px;
+          flex-shrink: 0;
+        }
+
+        .card-bottom {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 10px;
+          border-top: 1px solid #eee;
+        }
+
+        .card-price {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .price-amount {
+          font-size: 18px;
+          font-weight: bold;
+          color: #8B0000;
+          line-height: 1;
+        }
+
+        .price-note {
+          font-size: 8px;
+          color: #999;
+          margin-top: 2px;
+        }
+
+        .card-cta {
+          background: linear-gradient(135deg, #0000FF 0%, #4169E1 100%);
+          color: white;
+          border: none;
+          padding: 10px 15px;
+          border-radius: 8px;
+          font-size: 11px;
+          font-weight: bold;
+          cursor: pointer;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          box-shadow: 0 3px 10px rgba(0,0,255,0.3);
+          transition: all 0.3s;
+        }
+
+        .card-cta:active {
+          transform: scale(0.95);
+        }
+
+        .footer-actions {
+          flex-shrink: 0;
+          display: flex;
+          gap: 8px;
+          padding-top: 10px;
+        }
+
+        .footer-btn {
+          flex: 1;
+          background: white;
+          border: 2px solid #8B0000;
+          color: #8B0000;
+          padding: 12px 10px;
+          border-radius: 10px;
+          font-size: 11px;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.3s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 5px;
+        }
+
+        .footer-btn:active {
+          background: #8B0000;
+          color: white;
+        }
+
+        .footer-btn.primary {
+          background: #DAA520;
+          border-color: #DAA520;
+          color: white;
+        }
+
+        .footer-btn.primary:active {
+          background: #B8860B;
+          border-color: #B8860B;
+        }
+
+        .trust-bar {
+          display: flex;
+          justify-content: space-around;
+          padding: 8px 0;
+          font-size: 9px;
+          color: #666;
+          text-align: center;
+          flex-shrink: 0;
+        }
+
+        .trust-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 3px;
+        }
+
+        .trust-icon {
+          font-size: 14px;
+        }
+      `}</style>
+
+      <div className="memberships-page">
+        <div className="header">
+          <div className="logo">Wishful<br />Tinkering</div>
+          <div className="header-title">Memberships</div>
+          <div className="header-subtitle">Choose your perfect plan</div>
+        </div>
+
+        <div className="main-container">
+          <div className="cards-container">
+            {memberships.map((membership, index) => (
+              <div
+                key={membership.id}
+                className={`membership-card ${membership.isFeatured ? 'featured' : ''}`}
+                onClick={() => handleSelect(membership)}
               >
-                <Sparkles size={16} className="text-[#D4A017]" />
-              </motion.span>
-              <span>MEMBERSHIPS</span>
-              <motion.span
-                animate={{ scale: [1, 1.1, 1], rotate: [0, -5, 5, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <Sparkles size={16} className="text-[#D4A017]" />
-              </motion.span>
-            </h1>
+                {membership.isFeatured && (
+                  <div className="best-value-badge">⭐ BEST VALUE</div>
+                )}
+                <div className="card-icon-section">
+                  <div className="card-icon">{membership.icon}</div>
+                  <div className="card-rank">{index + 1}</div>
+                </div>
+                <div className="card-content">
+                  <div className="card-header">
+                    <h3 className="card-title">{membership.name}</h3>
+                    <p className="card-description">{membership.description}</p>
+                  </div>
+                  <div className="card-features">
+                    {membership.features.map((feature, idx) => (
+                      <div key={idx} className="feature-item">
+                        <span className="feature-icon">✓</span>
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="card-bottom">
+                    <div className="card-price">
+                      <span className="price-amount">{membership.price}</span>
+                      <span className="price-note">{membership.priceNote}</span>
+                    </div>
+                    <button
+                      className="card-cta"
+                      onClick={(e) => handleBuyNow(membership, e)}
+                    >
+                      Select
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <button
-            onClick={navigateToHome || onBack}
-            className="hover:opacity-80 transition-opacity"
-            aria-label="Go to home"
-          >
-            <img src={logoImage} alt="Wishful Tinkering" className="h-8 w-auto" />
-          </button>
+          <div className="trust-bar">
+            <div className="trust-item">
+              <span className="trust-icon">🔒</span>
+              <span>Secure</span>
+            </div>
+            <div className="trust-item">
+              <span className="trust-icon">💯</span>
+              <span>Guaranteed</span>
+            </div>
+            <div className="trust-item">
+              <span className="trust-icon">⚡</span>
+              <span>Instant Access</span>
+            </div>
+            <div className="trust-item">
+              <span className="trust-icon">🎯</span>
+              <span>12 Left</span>
+            </div>
+          </div>
+
+          <div className="footer-actions">
+            <button className="footer-btn" onClick={handleCompare}>
+              📊 Compare
+            </button>
+            <button className="footer-btn primary" onClick={handleContact}>
+              💬 Questions?
+            </button>
+          </div>
         </div>
-      </motion.div>
-
-      {/* Subtitle */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-        className="px-4 pt-4 pb-3 text-center text-sm text-[#1E3A5F] italic"
-        style={{ fontFamily: 'Georgia, serif' }}
-      >
-        Unlock Your Full Potential
-      </motion.div>
-
-      {/* Category Tabs */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
-        className="px-4 pb-4"
-      >
-        <div className="flex gap-2 overflow-x-auto no-scrollbar max-w-lg mx-auto">
-          {tabs.map((tab, idx) => (
-            <motion.button
-              key={tab}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.35 + (idx * 0.1), ease: 'easeOut' }}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-2.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all ${
-                activeTab === tab
-                  ? 'bg-[#1E3A5F] text-white shadow-md'
-                  : 'bg-white text-[#1E3A5F] border border-[#1E3A5F]/30'
-              }`}
-              style={{ fontFamily: 'Open Sans, sans-serif' }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {tab}
-            </motion.button>
-          ))}
-        </div>
-      </motion.div>
-
-      {/* Products - Vertical Card Stack */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.5 }}
-        className="flex-1 overflow-y-auto px-4 pb-4"
-      >
-        <div className="max-w-lg mx-auto space-y-4">
-          <AnimatePresence mode="popLayout">
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={`${activeTab}-${product.id}`}
-                layout
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{
-                  opacity: { duration: 0.4 },
-                  y: { duration: 0.5, ease: 'easeOut' },
-                  layout: { duration: 0.4 }
-                }}
-              >
-                <PlayingCard
-                  book={product}
-                  index={index}
-                  onSelect={() => onProductSelect(product.id)}
-                  onLockedClick={() => handleLockedClick(product)}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      </motion.div>
-
-      <MobileFooter onMenuClick={onBack} />
-
-      <ComingSoonModal
-        isOpen={isComingSoonModalOpen}
-        onClose={() => setIsComingSoonModalOpen(false)}
-        bookTitle={selectedLockedProduct?.title}
-        bookSymbol={selectedLockedProduct?.symbol}
-      />
-    </div>
+      </div>
+    </>
   );
 }
