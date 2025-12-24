@@ -65,7 +65,7 @@ export function MobileMenu({ isOpen, onClose, onNavigate }: MobileMenuProps) {
             initial={{ x: '-100%' }}
             animate={{ x: 0 }}
             exit={{ x: '-100%' }}
-            transition={{ duration: 0.4, ease: [0.68, -0.55, 0.265, 1.55] }}
+            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
             className="fixed top-0 left-0 h-screen w-[85%] max-w-[350px] bg-[#1a1a1a] z-[999] shadow-2xl flex flex-col"
           >
             <style>{`
