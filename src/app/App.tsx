@@ -16,8 +16,9 @@ import { BookReaderTabs } from './components/BookReaderTabs';
 import { TermsOfServicePage } from './components/TermsOfServicePage';
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { RefundPolicyPage } from './components/RefundPolicyPage';
+import { BuyBookPage } from './components/BuyBookPage';
 
-type Page = 'home' | 'reader' | 'mode-selection' | 'read-only' | 'read-listen' | 'contact' | 'memberships' | 'product' | 'terms' | 'privacy' | 'refund';
+type Page = 'home' | 'reader' | 'mode-selection' | 'read-only' | 'read-listen' | 'contact' | 'memberships' | 'product' | 'terms' | 'privacy' | 'refund' | 'buy-book';
 
 const bookContent: Record<number, {
   title: string;
@@ -282,6 +283,10 @@ export default function App() {
     setCurrentPage('memberships');
   };
 
+  const handleBuyBookClick = () => {
+    setCurrentPage('buy-book');
+  };
+
   const handleProductSelect = (productId: number) => {
     setSelectedProductId(productId);
     setCurrentPage('product');
@@ -321,6 +326,10 @@ export default function App() {
 
   if (currentPage === 'refund') {
     return <RefundPolicyPage onBack={handleBackToHome} navigateToHome={handleBackToHome} />;
+  }
+
+  if (currentPage === 'buy-book') {
+    return <BuyBookPage onBack={handleBackToHome} navigateToHome={handleBackToHome} />;
   }
 
 
@@ -387,7 +396,7 @@ export default function App() {
         <div className="h-screen flex flex-col" style={{ height: '100vh', overflow: 'hidden' }}>
           <MobileHeader onMenuToggle={handleMenuToggle} onNavigate={handleHeaderNavigation} />
           <TaglineBanner />
-          <BookCarousel onBookClick={handleBookClick} />
+          <BookCarousel onBookClick={handleBookClick} onBuyClick={handleBuyBookClick} />
           <MobileFooter onMembershipsClick={handleMembershipsClick} onMenuClick={handleMenuToggle} />
         </div>
         <MobileMenu

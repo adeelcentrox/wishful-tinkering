@@ -10,9 +10,10 @@ const books = [
 
 interface BookCarouselProps {
   onBookClick?: (bookId: number) => void;
+  onBuyClick?: () => void;
 }
 
-export function BookCarousel({ onBookClick }: BookCarouselProps) {
+export function BookCarousel({ onBookClick, onBuyClick }: BookCarouselProps) {
   const [idx, setIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(0);
   const [anim, setAnim] = useState(false);
@@ -171,6 +172,10 @@ export function BookCarousel({ onBookClick }: BookCarouselProps) {
         .dot{width:8px;height:8px;border-radius:50%;background:#D4C4B0;border:none;cursor:pointer;transition:all .3s}
         .dot:hover{background:#C9A227}
         .dot.on{background:#8B4513;transform:scale(1.2)}
+        .buy-section{margin-top:30px;text-align:center}
+        .buy-btn{padding:12px 30px;background:linear-gradient(135deg,#1E90FF,#4169E1);color:#fff;border:none;border-radius:25px;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 15px rgba(30,144,255,0.3);transition:all .3s;font-family:'Cormorant Garamond',serif}
+        .buy-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(30,144,255,0.5)}
+        .buy-text{font-size:12px;color:#666;margin-top:12px;font-style:italic}
       `}</style>
 
       <h2 className="title">Wanna learn how?</h2>
@@ -237,6 +242,13 @@ export function BookCarousel({ onBookClick }: BookCarouselProps) {
           <button key={i} className={`dot ${i === idx ? 'on' : ''}`} onClick={() => !anim && i !== idx && go(i > idx ? 'next' : 'prev')}/>
         ))}
       </div>
+
+      {onBuyClick && (
+        <div className="buy-section">
+          <button className="buy-btn" onClick={onBuyClick}>Get Full Membership →</button>
+          <p className="buy-text">Unlock all 4 books + AI mentor + audiobooks</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -64,10 +64,10 @@ export function HeroSection({ onBookSelect }: HeroSectionProps) {
               className="space-y-1"
               style={{ fontFamily: 'Playfair Display, serif' }}
             >
-              <div className="text-[#D4A017] text-[26px] xl:text-[32px] leading-tight font-semibold">
+              <div className="text-[#D4A017] text-[22px] sm:text-[26px] xl:text-[32px] leading-snug font-semibold">
                 We Protect People From Being
               </div>
-              <div className="text-[#D4A017] text-[26px] xl:text-[32px] leading-tight font-semibold">
+              <div className="text-[#D4A017] text-[22px] sm:text-[26px] xl:text-[32px] leading-snug font-semibold">
                 Forced To Do{' '}
                 <span className="underline decoration-2 underline-offset-4">ANYTHING.</span>
               </div>
@@ -77,7 +77,7 @@ export function HeroSection({ onBookSelect }: HeroSectionProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-[#1A1A1A] text-[16px] xl:text-[18px] px-2"
+              className="text-[#1A1A1A] text-[14px] sm:text-[16px] xl:text-[18px] px-2 leading-relaxed"
               style={{ fontFamily: 'Open Sans, sans-serif' }}
             >
               We've started by protecting them against liars and traitors.
@@ -87,7 +87,7 @@ export function HeroSection({ onBookSelect }: HeroSectionProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="text-[#1A1A1A] text-[17px] xl:text-[19px] font-medium pt-1"
+              className="text-[#1A1A1A] text-[15px] sm:text-[17px] xl:text-[19px] font-medium pt-2"
               style={{ fontFamily: 'Open Sans, sans-serif' }}
             >
               Wanna learn how?
@@ -162,12 +162,12 @@ export function HeroSection({ onBookSelect }: HeroSectionProps) {
                 <div className="absolute left-0 top-0 bottom-0 w-2 bg-black/20"></div>
               </motion.div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <motion.button
                   onClick={nextBook}
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
-                  className="bg-[#1E3A5F] text-white px-4 py-2 rounded-lg text-sm"
+                  className="bg-[#1E3A5F] text-white px-3 py-2 rounded-lg text-[13px] sm:text-sm"
                   style={{ fontFamily: 'Open Sans, sans-serif' }}
                 >
                   Shuffle
@@ -177,7 +177,7 @@ export function HeroSection({ onBookSelect }: HeroSectionProps) {
                   onClick={() => handleBookClick(featuredBooks[currentBookIndex].id)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-[#D4A017] text-white px-6 py-2 rounded-lg text-sm font-medium"
+                  className="bg-[#D4A017] text-white px-4 py-2 rounded-lg text-[13px] sm:text-sm font-medium"
                   style={{ fontFamily: 'Open Sans, sans-serif' }}
                 >
                   Read Now
