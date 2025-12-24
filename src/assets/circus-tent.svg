@@ -1,0 +1,7 @@
+<svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+  <!-- Circus tent icon -->
+  <path d="M14 2 L4 14 L8 14 L4 24 L24 24 L20 14 L24 14 Z" fill="#D4A017" stroke="#8B0000" stroke-width="1"/>
+  <path d="M14 2 L9 12 L14 12 L14 2 Z" fill="#8B0000"/>
+  <path d="M14 2 L19 12 L14 12 L14 2 Z" fill="#A00000"/>
+  <circle cx="14" cy="18" r="3" fill="#FAF0E6"/>
+</svg>
