@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MobileHeader } from './components/MobileHeader';
 import { TaglineBanner } from './components/TaglineBanner';
-import { HeroSection } from './components/HeroSection';
-import { BooksCarousel } from './components/BooksCarousel';
+import { BookCarousel } from './components/BookCarousel';
 import { MobileFooter } from './components/MobileFooter';
 import { BookReaderPage } from './components/BookReaderPage';
 import { ContactPage } from './components/ContactPage';
@@ -388,8 +387,7 @@ export default function App() {
         <div className="h-screen flex flex-col" style={{ height: '100vh', overflow: 'hidden' }}>
           <MobileHeader onMenuToggle={handleMenuToggle} onNavigate={handleHeaderNavigation} />
           <TaglineBanner />
-          <HeroSection onBookSelect={handleBookClick} />
-          <BooksCarousel onBookClick={handleBookClick} />
+          <BookCarousel onBookClick={handleBookClick} />
           <MobileFooter onMembershipsClick={handleMembershipsClick} onMenuClick={handleMenuToggle} />
         </div>
         <MobileMenu
